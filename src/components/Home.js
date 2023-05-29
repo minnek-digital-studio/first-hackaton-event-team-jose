@@ -21,6 +21,7 @@ const Home = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const fileInputRef = useRef(null);
   const [showReplaceContainer, setShowReplaceContainer] = useState(false);
+  const [showNewNameInput, setShowNewNameInput] = useState(false);
 //   const regexEspecialCaracter = /[@$?¡\-_]/;
 
   const onSubmit = (data) => {
@@ -67,14 +68,18 @@ const Home = () => {
         Seleccionar Archivos
       </Button>
 
-      <Typography style={{ textAlign: "left", paddingTop: "10px" }}>
-        Nuevo nombre de archivos
-      </Typography>
-      <TextField
-        className="textfield-name"
-        {...register("newName")}
-        placeholder="Digite nuevo nombre"
-      />
+      {showNewNameInput && (
+        <>
+          <Typography style={{ textAlign: "left", paddingTop: "10px" }}>
+            Nuevo nombre de archivos
+          </Typography>
+          <TextField
+            className="textfield-name"
+            {...register("newName")}
+            placeholder="Digite nuevo nombre"
+          />
+        </>
+      )}
 
       <FormControl component="fieldset" className="optionsContainer">
         <FormLabel component="legend" className="divider">
@@ -86,6 +91,7 @@ const Home = () => {
           onChange={(e) => {
             setOptions(e.target.value);
             setShowReplaceContainer(e.target.value === 'replace');
+            setShowNewNameInput(e.target.value === 'newName');
           }}
         >
           <FormControlLabel
