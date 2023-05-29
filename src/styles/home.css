@@ -1,0 +1,46 @@
+.home {
+  display: grid;
+  width: 80%;
+  margin: 12% auto;
+}
+
+.card {
+  width: 50%;
+  margin: auto;
+  margin-top: 10%;
+}
+
+.replaceContainer{
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.textfield {
+  width: max-content;
+  display: block !important;
+}
+
+.replaceRow {
+  margin: auto;
+}
+
+.caracter-field {
+  margin: 1em;
+}
+
+.btn {
+  background-color: #eeeee4 !important;
+}
+
+.divider {
+  background-color: #eeeee4;
+  padding: 0.5em;
+  width: 100%;
+}
+.optionsContainer {
+  margin-top: 5% !important;
+}
+
+.mg-auto {
+  margin: auto;
+}
