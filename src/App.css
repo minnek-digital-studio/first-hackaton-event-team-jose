@@ -40,12 +40,12 @@ body {
 
 .home {
   display: grid;
-  width: 80%;
+  max-width: 80%;
   margin: 12% auto;
 }
 
 .card {
-  width: 50%;
+  max-width: 50%;
   margin: auto;
   margin-top: 10%;
 }

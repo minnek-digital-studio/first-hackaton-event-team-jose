@@ -1,18 +1,32 @@
+body {
+  text-align: center;
+  background-color: #abdbe3;
+}
+
 .home {
   display: grid;
-  width: 80%;
-  margin: 12% auto;
+  margin: auto;
+  padding: 50px;
 }
 
 .card {
-  width: 50%;
-  margin: auto;
-  margin-top: 10%;
+  width: 80%;
+  margin: 40px auto 40px auto;
 }
 
 .replaceContainer{
-  display: flex;
+  display: grid;
   margin-bottom: 1em;
+}
+
+@media only screen and (min-width: 1200px) {
+  .card {
+    width: 40%;
+  }
+
+  .replaceContainer{
+    display: flex;
+  }
 }
 
 .textfield {
@@ -35,12 +49,42 @@
 .divider {
   background-color: #eeeee4;
   padding: 0.5em;
-  width: 100%;
+  width: 50%;
+  font-size: 18px !important;
+  padding: 12px !important;
+  color: black !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .optionsContainer {
   margin-top: 5% !important;
 }
 
 .mg-auto {
   margin: auto;
+}
+
+.btn {
+  color: #063970 !important;
+  font-weight: bold !important;
+  padding: 20px !important;
+}
+
+.btn {
+  font-size: 14px !important;
+}
+
+button {
+  color: #063970 !important;
+  font-size: 18px !important;
+  font-weight: bold !important;
+}
+
+svg {
+  width: 20px;
+  height: 20px;
+  fill: #063970;
+  margin-right: 10px;
 }
