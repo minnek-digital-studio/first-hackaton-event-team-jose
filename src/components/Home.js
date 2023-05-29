@@ -17,53 +17,31 @@ const Home = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const filesName = ["sshna-8.png", "shhsh-2.png", "PEDro-5.png"];
   const [options, setOptions] = useState();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const fileInputRef = useRef(null);
-//   const regexEspecialCaracter = /[@$?¡\-_]/;
 
   const onSubmit = (data) => {
     const dataCustom = Object.assign({}, { option: options }, data);
-    // const modifiedOptions = filesName.map((name) => {
-    //   if (dataCustom.option === "lowercase") {
-    //     return name.toLowerCase();
-    //   }
-    //   if (dataCustom.option === "uppercase") {
-    //     return name.toUpperCase();
-    //   }
-    //   if (dataCustom.option === "replace-especial-caracter") {
-    //     return name.replace(regexEspecialCaracter, "");
-    //   }
-    //   if (dataCustom.option === "replace") {
-    //     return name.replace(dataCustom.oldCharacter, dataCustom.newCharacter);
-    //   } else {
-    //     return name;
-    //   }
-    // });
-    // handleFileUpload(dataCustom.newName);
-    const { option, oldCharacter, newCharacter , newName} = dataCustom;
+    const { option, oldCharacter, newCharacter, newName } = dataCustom;
 
-    const optionsBody = {
-      uppercase: option === "uppercase",
-      lowercase: option === "lowercase",
-      capitalize: option === "capitalize",
-      replaceAll: option === "replace",
-      replaceValues: [oldCharacter, newCharacter],
-    };
+    if (selectedFiles.length > 0) {
+      const formData = new FormData();
+      for (let i = 0; i < selectedFiles.length; i++) {
+        formData.append("files", selectedFiles[i]);
+      }
+      formData.append("newName", newName);
+      formData.append("uppercase", option === "uppercase");
+      formData.append("lowercase", option === "lowercase");
+      formData.append("capitalize", option === "capitalize");
+      formData.append("replaceAll", option === "replace");
+      formData.append("replaceValues", [oldCharacter, newCharacter]);
 
-    fetch("http://192.168.1.168:3030/rename", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        newName: newName ,
-        options: optionsBody,
-        files: selectedFiles
-      }),
-    })
-    // return modifiedOptions;
+      fetch("http://192.168.1.168:3030/rename", {
+        method: "POST",
+        body: formData,
+      }).then((response) => response.json());
+    }
   };
 
   const handleFileClick = () => {
@@ -71,35 +49,8 @@ const Home = () => {
   };
 
   const handleFileChange = (event) => {
-    const files = event.target.files;
-    setSelectedFiles(files);
+    setSelectedFiles(event.target.files);
   };
-
-//   const handleAllFilesDownload = (files) => {
-//     files.forEach((file) => {
-//       const url = URL.createObjectURL(file);
-//       const link = document.createElement("a");
-//       link.href = url;
-//       link.download = file.name;
-//       link.click();
-//     });
-//   };
-
-//   const handleFileUpload = (name) => {
-//     if (selectedFiles.length > 0) {
-//       const modifiedFiles = Array.from(selectedFiles).map((file) => {
-//         const modifiedName = name + getFileExtension(file.name);
-//         return new File([file], modifiedName);
-//       });
-//       console.log("Archivos seleccionados:", modifiedFiles);
-//       handleAllFilesDownload(modifiedFiles);
-//     }
-//   };
-
-//   const getFileExtension = (filename) => {
-//     return "." + filename.split(".").pop();
-//   };
-
   return (
     <form className="home" onSubmit={handleSubmit((data) => onSubmit(data))}>
       <input
@@ -128,6 +79,11 @@ const Home = () => {
         </FormLabel>
 
         <RadioGroup name="option" onChange={(e) => setOptions(e.target.value)}>
+          <FormControlLabel
+            value="newName"
+            control={<Radio />}
+            label="New name"
+          />
           <FormControlLabel
             value="lowercase"
             control={<Radio />}
@@ -177,7 +133,7 @@ const Home = () => {
           />
         </div>
       </div>
-      <input type="submit" onClick={onSubmit} hidden />
+      <input type="submit" hidden />
       <Button type="submit">Download</Button>
     </form>
   );
