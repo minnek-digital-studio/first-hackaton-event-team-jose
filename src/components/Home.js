@@ -19,25 +19,51 @@ const Home = () => {
   } = useForm();
   const filesName = ["sshna-8.png", "shhsh-2.png", "PEDro-5.png"];
   const [options, setOptions] = useState();
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const fileInputRef = useRef(null);
-  const regexEspecialCaracter = /[@$?¡\-_]/;
-  
+//   const regexEspecialCaracter = /[@$?¡\-_]/;
+
   const onSubmit = (data) => {
     const dataCustom = Object.assign({}, { option: options }, data);
-    const modifiedOptions = filesName.map((name) => {
-      if (dataCustom.option === "lowercase") {
-        return name.toLowerCase();
-      }
-      if (dataCustom.option === "uppercase") {
-        return name.toUpperCase();
-      } 
-      if (dataCustom.option === "replace-especial-caracter") {
-        return name.replace(regexEspecialCaracter, '');
-      } else {
-        return name.replace(dataCustom.oldCaracter, dataCustom.newCaracter);
-      }
-    });
-    return modifiedOptions
+    // const modifiedOptions = filesName.map((name) => {
+    //   if (dataCustom.option === "lowercase") {
+    //     return name.toLowerCase();
+    //   }
+    //   if (dataCustom.option === "uppercase") {
+    //     return name.toUpperCase();
+    //   }
+    //   if (dataCustom.option === "replace-especial-caracter") {
+    //     return name.replace(regexEspecialCaracter, "");
+    //   }
+    //   if (dataCustom.option === "replace") {
+    //     return name.replace(dataCustom.oldCharacter, dataCustom.newCharacter);
+    //   } else {
+    //     return name;
+    //   }
+    // });
+    // handleFileUpload(dataCustom.newName);
+    const { option, oldCharacter, newCharacter } = dataCustom;
+
+    const options = {
+      uppercase: option === "uppercase",
+      lowercase: option === "lowercase",
+      capitalize: option === "capitalize",
+      replaceAll: option === "replace",
+      replaceValues: [oldCharacter, newCharacter],
+    };
+
+    fetch("http://localhost:3030/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newName: "",
+        options: options,
+        files: selectedFiles
+      }),
+    })
+    // return modifiedOptions;
   };
 
   const handleFileClick = () => {
@@ -46,8 +72,34 @@ const Home = () => {
 
   const handleFileChange = (event) => {
     const files = event.target.files;
-    console.log(files);
+    setSelectedFiles(files);
   };
+
+//   const handleAllFilesDownload = (files) => {
+//     files.forEach((file) => {
+//       const url = URL.createObjectURL(file);
+//       const link = document.createElement("a");
+//       link.href = url;
+//       link.download = file.name;
+//       link.click();
+//     });
+//   };
+
+//   const handleFileUpload = (name) => {
+//     if (selectedFiles.length > 0) {
+//       const modifiedFiles = Array.from(selectedFiles).map((file) => {
+//         const modifiedName = name + getFileExtension(file.name);
+//         return new File([file], modifiedName);
+//       });
+//       console.log("Archivos seleccionados:", modifiedFiles);
+//       handleAllFilesDownload(modifiedFiles);
+//     }
+//   };
+
+//   const getFileExtension = (filename) => {
+//     return "." + filename.split(".").pop();
+//   };
+
   return (
     <form className="home" onSubmit={handleSubmit((data) => onSubmit(data))}>
       <input
@@ -64,11 +116,16 @@ const Home = () => {
       <Typography style={{ textAlign: "left", paddingTop: "10px" }}>
         Nuevo nombre de archivos
       </Typography>
-      <TextField className="textfield-name" {...register("newName")} placeholder="Digite nuevo nombre"/>
-
+      <TextField
+        className="textfield-name"
+        {...register("newName")}
+        placeholder="Digite nuevo nombre"
+      />
 
       <FormControl component="fieldset" className="optionsContainer">
-        <FormLabel component="legend" className="divider">Opciones</FormLabel>
+        <FormLabel component="legend" className="divider">
+          Opciones
+        </FormLabel>
 
         <RadioGroup name="option" onChange={(e) => setOptions(e.target.value)}>
           <FormControlLabel
@@ -82,14 +139,19 @@ const Home = () => {
             label="UpperCase"
           />
           <FormControlLabel
+            value="capitalize"
+            control={<Radio />}
+            label="Capitalize"
+          />
+          <FormControlLabel
             value="replace"
             control={<Radio />}
             label="Replace"
           />
           <FormControlLabel
-            value="replace-especial-caracter"
+            value="replace-especial-character"
             control={<Radio />}
-            label="Replace especial caracter"
+            label="Replace especial character"
           />
         </RadioGroup>
       </FormControl>
@@ -98,19 +160,25 @@ const Home = () => {
           <Typography style={{ textAlign: "left", paddingTop: "10px" }}>
             Caracter a reemplazar
           </Typography>
-          <TextField className="textfield" {...register("oldCaracter")} placeholder="ej: -" />
+          <TextField
+            className="textfield"
+            {...register("oldCharacter")}
+            placeholder="ej: -"
+          />
         </div>
         <div className="replaceRow">
           <Typography style={{ textAlign: "left", paddingTop: "10px" }}>
             Remplazo de caracter
           </Typography>
-          <TextField className="textfield" {...register("newCaracter")} placeholder="ej: a" />
+          <TextField
+            className="textfield"
+            {...register("newCharacter")}
+            placeholder="ej: a"
+          />
         </div>
       </div>
       <input type="submit" onClick={onSubmit} hidden />
-      <Button type="submit">
-        Enviar
-      </Button>
+      <Button type="submit">Download</Button>
     </form>
   );
 };
