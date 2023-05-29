@@ -1,5 +1,5 @@
 import { Card } from "@mui/material";
-import "./App.css";
+import "./styles/home.css";
 import Home from "./components/Home";
 
 function App() {
