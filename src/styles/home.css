@@ -79,6 +79,7 @@ body {
 button {
   color: #063970 !important;
   font-size: 18px !important;
+  font-weight: bold !important;
 }
 
 svg {
