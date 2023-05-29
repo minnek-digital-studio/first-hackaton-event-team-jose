@@ -42,9 +42,9 @@ const Home = () => {
     //   }
     // });
     // handleFileUpload(dataCustom.newName);
-    const { option, oldCharacter, newCharacter } = dataCustom;
+    const { option, oldCharacter, newCharacter , newName} = dataCustom;
 
-    const options = {
+    const optionsBody = {
       uppercase: option === "uppercase",
       lowercase: option === "lowercase",
       capitalize: option === "capitalize",
@@ -52,14 +52,14 @@ const Home = () => {
       replaceValues: [oldCharacter, newCharacter],
     };
 
-    fetch("http://localhost:3030/", {
+    fetch("http://192.168.1.168:3030/rename", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        newName: "",
-        options: options,
+        newName: newName ,
+        options: optionsBody,
         files: selectedFiles
       }),
     })
